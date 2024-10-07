@@ -163,3 +163,4 @@ cython_debug/
 
 # Django Project Files
 core/migrations
+pytest.ini
