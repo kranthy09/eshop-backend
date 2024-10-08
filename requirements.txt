@@ -5,3 +5,7 @@ django-filter>=23.2
 pytest
 pytest-django
 pytest-cov
+django-cors-headers==4.4.0
+djangorestframework-simplejwt==5.3.1
+drf-yasg==1.21.7
+swagger-spec-validator==3.0.4
