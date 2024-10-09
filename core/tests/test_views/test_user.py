@@ -1,5 +1,5 @@
 """
-Test core app url endpoint API views
+Test User API
 """
 
 from django.test import TestCase
@@ -85,3 +85,31 @@ class TestTokenObtainView(TestCase):
         response = self.client.post(self.url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn("access", response.data)
+
+
+class TestUserProfileView(TestCase):
+    """Test user profile view"""
+
+    def setUp(self):
+        self.client = APIClient()
+        self.url = reverse("user-profile")
+        self.user = User.objects.create_user(
+            username="test_user",
+            email="test_user@example.com",
+            password="test_password",
+        )
+        response = self.client.post(
+            reverse("token_obtain_pair"),
+            data={
+                "username": self.user.username,
+                "password": "test_password",
+            },
+        )
+        print("response: ", response.json())
+        self.access_token = response.json()["access"]
+
+    def test_user_profile_success(self):
+        headers = {"Authorization": "Bearer " + self.access_token}
+        response = self.client.get(self.url, headers=headers)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("username", response.data)

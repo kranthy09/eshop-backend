@@ -7,6 +7,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, Product, Brand, Category, Review, Tags
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "is_admin"]
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     """Request Body to register a new user"""
 
