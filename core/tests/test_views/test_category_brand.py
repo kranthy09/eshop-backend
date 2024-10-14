@@ -87,7 +87,7 @@ class TestCategoryAPI(TestCase):
         )
 
 
-class TestBrandCategory(TestCase):
+class TestBrandAPI(TestCase):
     """Test brand and category"""
 
     def setUp(self):

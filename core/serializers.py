@@ -95,7 +95,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ReviewSerilizer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     """Response model for review"""
 
     class Meta:

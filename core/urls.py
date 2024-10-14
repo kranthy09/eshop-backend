@@ -3,6 +3,7 @@ URL enpoints to core App
 """
 
 from django.urls import path
+from rest_framework import routers
 from core.views import (
     HealthCheckView,
     RegisterUserView,
@@ -12,8 +13,16 @@ from core.views import (
     BrandListAPIView,
     BrandDetailAPIView,
     BrandPartialUpdateAPIView,
+    ProductAPIViewset,
+    ReviewAPIViewset,
+    TagsAPIViewset,
 )
 
+
+router = routers.DefaultRouter()
+router.register(r"products", ProductAPIViewset)
+router.register(r"reviews", ReviewAPIViewset)
+router.register(r"tags", TagsAPIViewset)
 
 urlpatterns = [
     path("health/", HealthCheckView.as_view(), name="health-check"),
@@ -37,3 +46,5 @@ urlpatterns = [
         name="partial-update-brand",
     ),
 ]
+
+urlpatterns += router.urls

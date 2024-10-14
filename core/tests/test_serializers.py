@@ -8,7 +8,7 @@ from core.serializers import (
     ProductSerializer,
     CategorySerializer,
     BrandSerializer,
-    ReviewSerilizer,
+    ReviewSerializer,
     TagsSerializer,
 )
 
@@ -62,7 +62,7 @@ def test_category_model_serializer(category):
 def test_review_model_serializer(review):
     """Test Response model for review"""
 
-    serializer = ReviewSerilizer(review)
+    serializer = ReviewSerializer(review)
     data = serializer.data
     assert data["id"] == review.id
     assert data["reviewer"] == review.reviewer.id

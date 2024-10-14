@@ -2,7 +2,7 @@
 URL endpoint API response views
 """
 
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
@@ -10,12 +10,15 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from core.models import User, Category, Brand
+from core.models import User, Category, Brand, Product, Review, Tags
 from core.serializers import (
     RegisterSerializer,
     UserSerializer,
     CategorySerializer,
     BrandSerializer,
+    ProductSerializer,
+    ReviewSerializer,
+    TagsSerializer,
 )
 
 
@@ -170,3 +173,33 @@ class BrandPartialUpdateAPIView(GenericAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+class ProductAPIViewset(viewsets.ModelViewSet):
+    """
+    API endpoint for managing products.
+    """
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class ReviewAPIViewset(viewsets.ModelViewSet):
+    """
+    API endpoint for managing reviews.
+    """
+
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class TagsAPIViewset(viewsets.ModelViewSet):
+    """
+    API endpoint for managing tags.
+    """
+
+    queryset = Tags.objects.all()
+    serializer_class = TagsSerializer
+    permission_classes = [permissions.IsAuthenticated]

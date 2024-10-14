@@ -15,7 +15,7 @@ def api_client():
     return APIClient()
 
 
-@pytest.mark.django_db
+@pytest.fixture
 def user():
     """Create and return user instance"""
     return User.objects.create(
@@ -25,12 +25,7 @@ def user():
     )
 
 
-@pytest.fixture(scope="module")
-def get_user(user):
-    return user
-
-
-@pytest.mark.django_db
+@pytest.fixture
 def category():
     """create and return category instance"""
     return Category.objects.create(
@@ -38,12 +33,7 @@ def category():
     )
 
 
-@pytest.fixture(scope="module")
-def get_category():
-    return category
-
-
-@pytest.mark.django_db
+@pytest.fixture
 def brand():
     """create and return brand instance"""
 
@@ -53,12 +43,7 @@ def brand():
     )
 
 
-@pytest.fixture(scope="module")
-def get_brand():
-    return brand
-
-
-@pytest.mark.django_db
+@pytest.fixture
 def product(category, brand):
     """create and return product instance"""
 
@@ -87,7 +72,7 @@ def product(category, brand):
     )
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def review(user, product):
     """create and return review instance"""
 
@@ -99,13 +84,8 @@ def review(user, product):
     )
 
 
-@pytest.mark.django_db
+@pytest.fixture
 def tag(product):
     """create and return tag instance"""
 
     return product.tags.create(tag_name="test_tag")
-
-
-@pytest.fixture(scope="module")
-def get_tag(tag):
-    return tag
