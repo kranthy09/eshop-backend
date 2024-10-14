@@ -4,7 +4,7 @@ Serializers for Core App Models
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User, Product, Brand, Category, Review, Tags
+from .models import User, Product, Brand, Category, Variant
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,27 +58,6 @@ class TokenObtainSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid username or password")
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """Response model for User"""
-
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "username",
-            "email",
-            "is_admin",
-        )
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    """Response model for Product"""
-
-    class Meta:
-        model = Product
-        fields = "__all__"
-
-
 class BrandSerializer(serializers.ModelSerializer):
     """Response model for brand"""
 
@@ -95,17 +74,22 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ReviewSerializer(serializers.ModelSerializer):
-    """Response model for review"""
+class ProductSerializer(serializers.ModelSerializer):
+    """Response model for Product"""
+
+    category = CategorySerializer()
+    brand = BrandSerializer()
 
     class Meta:
-        model = Review
+        model = Product
         fields = "__all__"
 
 
-class TagsSerializer(serializers.ModelSerializer):
-    """Response model for tags"""
+class VariantSerializer(serializers.ModelSerializer):
+    """Response model for Variant"""
+
+    product = ProductSerializer()
 
     class Meta:
-        model = Tags
+        model = Variant
         fields = "__all__"

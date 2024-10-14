@@ -14,15 +14,11 @@ from core.views import (
     BrandDetailAPIView,
     BrandPartialUpdateAPIView,
     ProductAPIViewset,
-    ReviewAPIViewset,
-    TagsAPIViewset,
 )
 
 
 router = routers.DefaultRouter()
 router.register(r"products", ProductAPIViewset)
-router.register(r"reviews", ReviewAPIViewset)
-router.register(r"tags", TagsAPIViewset)
 
 urlpatterns = [
     path("health/", HealthCheckView.as_view(), name="health-check"),

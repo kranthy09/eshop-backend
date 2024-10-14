@@ -4,7 +4,7 @@ Database fixtures and API Client rquests
 
 import pytest
 from rest_framework.test import APIClient
-from core.models import User, Brand, Category, Product
+from core.models import User, Brand, Category, Product, Variant
 
 
 @pytest.fixture
@@ -48,44 +48,23 @@ def product(category, brand):
     """create and return product instance"""
 
     return Product.objects.create(
-        name="test_product",
+        base_name="test_product",
         description="test product description",
-        price=10.99,
+        base_price=10.99,
         category=category,
         brand=brand,
-        image_url="https://image_url.com",
-        stock=5,
-        rating=4,
-        metadata={
-            "product_details": {
-                "brand": "KeyMaster",
-                "model": "KM-202",
-                "color": "Black",
-                "warranty": "1 year",
-            },
-            "specifications": {
-                "key_switch_type": "Cherry MX Red",
-                "backlighting": "RGB",
-                "connectivity": "USB",
-            },
-        },
     )
 
 
 @pytest.fixture
-def review(user, product):
-    """create and return review instance"""
+def variant(product):
+    """create and return variant instance"""
 
-    return product.reviews.create(
-        reviewer=user,
+    return Variant.objects.create(
         product=product,
-        comment="Test review comment",
-        rating=5,
+        name="test_variant",
+        price=5.99,
+        color="Black",
+        stock=5,
+        size="M",
     )
-
-
-@pytest.fixture
-def tag(product):
-    """create and return tag instance"""
-
-    return product.tags.create(tag_name="test_tag")

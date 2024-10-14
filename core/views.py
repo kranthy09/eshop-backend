@@ -10,15 +10,13 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from core.models import User, Category, Brand, Product, Review, Tags
+from core.models import User, Category, Brand, Product
 from core.serializers import (
     RegisterSerializer,
     UserSerializer,
     CategorySerializer,
     BrandSerializer,
     ProductSerializer,
-    ReviewSerializer,
-    TagsSerializer,
 )
 
 
@@ -182,24 +180,4 @@ class ProductAPIViewset(viewsets.ModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class ReviewAPIViewset(viewsets.ModelViewSet):
-    """
-    API endpoint for managing reviews.
-    """
-
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-
-class TagsAPIViewset(viewsets.ModelViewSet):
-    """
-    API endpoint for managing tags.
-    """
-
-    queryset = Tags.objects.all()
-    serializer_class = TagsSerializer
     permission_classes = [permissions.IsAuthenticated]

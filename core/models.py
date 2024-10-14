@@ -29,7 +29,7 @@ class Category(models.Model):
     """Category model for a set of Products"""
 
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -53,7 +53,7 @@ class Product(models.Model):
     """Product Model"""
 
     category = models.ForeignKey(
-        Category, related_name="products", on_delete=models.SET_NULL
+        Category, related_name="products", on_delete=models.SET_NULL, null=True
     )
     brand = models.ForeignKey(
         Brand, related_name="products", on_delete=models.CASCADE
@@ -76,9 +76,7 @@ class Variant(models.Model):
     )
     images = models.ManyToManyField(
         Image,
-        null=True,
         related_name="variant_images",
-        on_delete=models.CASCADE,
     )
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -95,7 +93,7 @@ class Sepcification(models.Model):
     product = models.ForeignKey(
         Variant, on_delete=models.CASCADE, related_name="specifications"
     )
-    name = models.CharField(max=255)
+    name = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -164,9 +162,7 @@ class Review(models.Model):
     reviewer = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    images = models.ManyToManyField(
-        Image, null=True, related_name="images", on_delete=models.CASCADE
-    )
+    images = models.ManyToManyField(Image, related_name="images")
     comment = models.TextField()
     rating = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -211,6 +207,59 @@ class CartItem(models.Model):
     )
     product_variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.product_variant.name} x {self.quantity}"
+
+
+class Order(models.Model):
+    """User Order"""
+
+    STATUS_CHOICES = (
+        ("pending", "Pending"),
+        ("processing", "Processing"),
+        ("shipped", "Shipped"),
+        ("delivered", "Delivered"),
+        ("cancelled", "Cancelled"),
+    )
+    PAYMENT_MODES = (
+        (
+            "cod",
+            "Cash on Delivery",
+        ),
+        ("qrcode", "QR Code"),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="orders",
+    )
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default="pending"
+    )
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_address = models.TextField()
+    payment_status = models.BooleanField(default=False)
+    payment_mode = models.CharField(
+        max_length=12, choices=PAYMENT_MODES, default="qrcode"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Order {self.status} - {self.user}"
+
+
+class OrderItem(models.Model):
+    """Order Items"""
+
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name="items"
+    )
+    product_variant = models.ForeignKey(Variant, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.product_variant.name} x {self.quantity}"

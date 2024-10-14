@@ -5,11 +5,9 @@ Test Core App Serializers
 import pytest
 from core.serializers import (
     UserSerializer,
-    ProductSerializer,
     CategorySerializer,
     BrandSerializer,
-    ReviewSerializer,
-    TagsSerializer,
+    ProductSerializer,
 )
 
 
@@ -23,18 +21,6 @@ def test_user_model_serializer(user):
         "email": user.email,
         "is_admin": user.is_admin,
     }
-
-
-@pytest.mark.django_db
-def test_product_model_serializer(product):
-    """Test Reponse model for Product"""
-
-    serializer = ProductSerializer(product)
-    data = serializer.data
-    assert data["id"] == product.id
-    assert data["name"] == product.name
-    assert data["description"] == product.description
-    assert data["price"] == str(product.price)
 
 
 @pytest.mark.django_db
@@ -59,24 +45,21 @@ def test_category_model_serializer(category):
 
 
 @pytest.mark.django_db
-def test_review_model_serializer(review):
-    """Test Response model for review"""
+def test_product_model_serializer(product):
+    """Test Response model for Product"""
 
-    serializer = ReviewSerializer(review)
+    serializer = ProductSerializer(product)
     data = serializer.data
-    assert data["id"] == review.id
-    assert data["reviewer"] == review.reviewer.id
-    assert data["product"] == review.product.id
-    assert data["comment"] == review.comment
-    assert data["rating"] == review.rating
+    assert data["id"] == product.id
+    assert data["base_name"] == product.base_name
+    assert data["description"] == product.description
+    assert data["base_price"] == str(product.base_price)
+    assert data["brand"]["id"] == product.brand.id
+    assert data["brand"]["name"] == product.brand.name
+    assert data["category"]["id"] == product.category.id
+    assert data["category"]["name"] == product.category.name
 
 
 @pytest.mark.django_db
-def test_tags_model_serializer(tag):
-    """Test Response model for tags"""
-
-    serializer = TagsSerializer(tag)
-    data = serializer.data
-    assert data["id"] == tag.id
-    assert data["product"] == tag.product.id
-    assert data["tag_name"] == tag.tag_name
+def test_variant_model_serializer(variant):
+    pass
