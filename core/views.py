@@ -17,6 +17,7 @@ from core.serializers import (
     CategorySerializer,
     BrandSerializer,
     ProductSerializer,
+    ProductDetailSerializer,
 )
 
 
@@ -179,5 +180,5 @@ class ProductAPIViewset(viewsets.ModelViewSet):
     """
 
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProductDetailSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

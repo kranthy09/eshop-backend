@@ -4,7 +4,19 @@ Serializers for Core App Models
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User, Product, Brand, Category, Variant
+from .models import (
+    User,
+    Product,
+    Brand,
+    Category,
+    Variant,
+    Specification,
+    Compatibility,
+    DeliveryTimeStatus,
+    Faq,
+    Carousel,
+    Image,
+)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -74,6 +86,14 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ImageSerializer(serializers.ModelSerializer):
+    """Response model for Image"""
+
+    class Meta:
+        model = Image
+        fields = ("url",)
+
+
 class ProductSerializer(serializers.ModelSerializer):
     """Response model for Product"""
 
@@ -92,4 +112,133 @@ class VariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Variant
+        fields = "__all__"
+
+
+class SpecificationSerializer(serializers.ModelSerializer):
+    """Response model for Specification"""
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = Specification
+        fields = "__all__"
+
+
+class CompatibilitySerializer(serializers.ModelSerializer):
+    """Response model for Compatibility"""
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = Compatibility
+        fields = "__all__"
+
+
+class DeliveryTimeStatusSerializer(serializers.ModelSerializer):
+    """Response model for DeliveryTimeStatus"""
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = DeliveryTimeStatus
+        fields = "__all__"
+
+
+class FaqSerializer(serializers.ModelSerializer):
+    """Response model for Faq"""
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = Faq
+        fields = "__all__"
+
+
+class CarouselSerializer(serializers.ModelSerializer):
+    """Response model for Carousel"""
+
+    product = ProductSerializer()
+
+    class Meta:
+        model = Carousel
+        fields = "__all__"
+
+
+# router'Products' response serializers
+
+# /product-detail/{id}
+
+
+class ProductVaraintSerializer(serializers.ModelSerializer):
+    """Response model for varaint in product detail view."""
+
+    images = ImageSerializer(many=True)
+
+    class Meta:
+        model = Variant
+        fields = ("id", "name", "price", "color", "stock", "size", "images")
+
+
+class ProductSpecificationSerializer(serializers.ModelSerializer):
+    """Response model for specification in product detail view."""
+
+    class Meta:
+        model = Specification
+        fields = (
+            "name",
+            "value",
+        )
+
+
+class ProductCompatibilitySerializer(serializers.ModelSerializer):
+    """Response model for compatibility in product detail view."""
+
+    class Meta:
+        model = Compatibility
+        fields = ("name", "product_type")
+
+
+class ProductDeliveryTimeStatusSerializer(serializers.ModelSerializer):
+    """Response model for delivery time status in product detail view."""
+
+    class Meta:
+        model = DeliveryTimeStatus
+        fields = (
+            "shipping_cost",
+            "estimated_delivery_time",
+            "additional_info",
+        )
+
+
+class ProductFaqSerializer(serializers.ModelSerializer):
+    """Response model for FAQ in product detail view."""
+
+    class Meta:
+        model = Faq
+        fields = ("question", "answer")
+
+
+class ProductCarouselSerializer(serializers.ModelSerializer):
+    """Response model for Carousel in product detail view."""
+
+    class Meta:
+        model = Carousel
+        fields = ("image", "title", "description")
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    """Response model for ProductDetail"""
+
+    category = CategorySerializer()
+    brand = BrandSerializer()
+    variants = ProductVaraintSerializer(many=True)
+    specifications = ProductSpecificationSerializer(many=True)
+    compatibility = ProductCompatibilitySerializer(many=True)
+    delivery_time_status = ProductDeliveryTimeStatusSerializer()
+    faqs = ProductFaqSerializer(many=True)
+    carousel = ProductCarouselSerializer(many=True)
+
+    class Meta:
+        model = Product
         fields = "__all__"

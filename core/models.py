@@ -87,11 +87,11 @@ class Variant(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Sepcification(models.Model):
+class Specification(models.Model):
     """Product specifications"""
 
     product = models.ForeignKey(
-        Variant, on_delete=models.CASCADE, related_name="specifications"
+        Product, on_delete=models.CASCADE, related_name="specifications"
     )
     name = models.CharField(max_length=255)
     value = models.CharField(max_length=255)
@@ -134,7 +134,7 @@ class Faq(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.question}"
+        return f"{self.product.base_name} - {self.question}"
 
 
 class Carousel(models.Model):
@@ -146,11 +146,12 @@ class Carousel(models.Model):
     image = models.URLField(max_length=999, null=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    order = models.PositiveSmallIntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.image}"
+        return f"{self.product.base_name} - {self.image}"
 
 
 class Review(models.Model):
@@ -169,7 +170,7 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.reviewer}"
+        return f"{self.product.base_name} - {self.reviewer}"
 
 
 class Tags(models.Model):
@@ -183,7 +184,7 @@ class Tags(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.product.name} - {self.tag_name}"
+        return f"{self.product.base_name} - {self.tag_name}"
 
 
 class Cart(models.Model):
